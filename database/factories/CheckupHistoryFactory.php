@@ -22,7 +22,7 @@ class CheckupHistoryFactory extends Factory
     public function definition()
     {
         $checkup = Checkup::where('status', 'Selesai')
-                          ->doesntHave('history')
+                          ->doesntHave('checkup_histories')
                           ->inRandomOrder()
                           ->first();
 

@@ -37,6 +37,8 @@ Route::post('/users/patients', [UserController::class, 'storePatient']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [AuthenticationController::class, 'logout']);
     Route::get('/me', [AuthenticationController::class, 'me']);
+    Route::post('/change-password', [PasswordController::class, 'changePassword']);
+
     Route::get('/users/admins', [UserController::class, 'indexAdmins'])->middleware('admin-only');
     Route::get('/users/doctors', [UserController::class, 'indexDoctors'])->middleware('admin-only');
     Route::get('/users/patients', [UserController::class, 'indexPatients'])->middleware('admin-only');

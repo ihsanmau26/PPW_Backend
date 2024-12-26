@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use App\Models\User;
 use App\Notifications\ForgotPasswordNotification;
 
 class PasswordController extends Controller
@@ -57,5 +58,30 @@ class PasswordController extends Controller
         DB::table('password_resets')->where('email', $request->email)->delete();
 
         return response()->json(['message' => 'Password berhasil diperbarui.']);
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
+        ]);
+
+        $user = Auth::user();
+
+        // Periksa apakah kata sandi lama cocok
+        if (!Hash::check($request->old_password, $user->password)) {
+            return response()->json([
+                'message' => 'Kata sandi lama tidak sesuai.',
+            ], 400);
+        }
+
+        // Update kata sandi baru dengan hashing
+        $user->password = $request->new_password;
+        $user->save();
+
+        return response()->json([
+            'message' => 'Kata sandi berhasil diubah.',
+        ], 200);
     }
 }
