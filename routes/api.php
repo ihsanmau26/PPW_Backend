@@ -52,6 +52,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('/users/doctors/{id}', [UserController::class, 'deleteDoctor'])->middleware('admin-only');
 
     Route::get('/shifts', [ShiftController::class, 'getShifts']);
+    Route::get('/shifts/{id}', [ShiftController::class, 'show']);
+    Route::post('/shifts', [ShiftController::class, 'store'])->middleware('admin-only');
+    Route::patch('/shifts/{id}', [ShiftController::class, 'update'])->middleware('admin-only');
+    Route::delete('/shifts/{id}', [ShiftController::class, 'destroy'])->middleware('admin-only');
 
     Route::get('/articles', [ArticleController::class, 'index']);
     Route::get('/articles/{id}', [ArticleController::class, 'show']);
